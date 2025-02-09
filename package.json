@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/varkkha/Fullstack-osa-3#readme",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
