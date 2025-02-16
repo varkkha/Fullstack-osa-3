@@ -53,20 +53,19 @@ app.post('/api/persons', (request, response) => {
     });
   }
 
-  const nameExists = persons.some(person => person.name.toLowerCase() === body.name.toLowerCase());
-  if (nameExists) {
-    return response.status(400).json({
-      error: "name must be unique"
-    });
-  }
+  //const nameExists = persons.some(person => person.name.toLowerCase() === body.name.toLowerCase());
+  //if (nameExists) {
+    //return response.status(400).json({
+      //error: "name must be unique"
+    //});
+  //}
 
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId(),
-  }
+  });
 
-  persons = persons.concat(person);
+  //persons = persons.concat(person);
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
