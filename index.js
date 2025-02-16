@@ -36,7 +36,7 @@ app.use(morgan('tiny'))
 app.use(requestLogger)
 app.use(express.static('dist'))
 
-morgan.token("body", req => JSON.stringify(req.body));
+morgan.token('body', req => JSON.stringify(req.body))
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -46,12 +46,8 @@ app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
-
-const generateId = () => {
-  return Math.floor(Math.random() * 1000000);
-}
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
@@ -59,26 +55,26 @@ app.post('/api/persons', (request, response, next) => {
   const person = new Person({
     name: body.name,
     number: body.number,
-  });
+  })
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
-app.get('/info', (request, response, next) => {
-  Person.countDocuments({})
-  .then(count => {
-    const currentDate = new Date();
-    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${currentDate}</p>`);
-  })
-  .catch(error => next(error))
-})
+//app.get('/info', (request, response, next) => {
+//Person.countDocuments({})
+//.then(count => {
+//const currentDate = new Date()
+//response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${currentDate}</p>`)
+//})
+//.catch(error => next(error))
+//})
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -103,13 +99,13 @@ app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if (person) {
-        response.json(person);
+        response.json(person)
       } else {
-        response.status(404).end();
+        response.status(404).end()
       }
     })
-    .catch(error => next(error));
-});
+    .catch(error => next(error))
+})
 
 app.use(unknownEndpoint)
 
