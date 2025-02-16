@@ -88,9 +88,13 @@ app.post('/api/persons', (request, response) => {
   .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
-  const currentDate = new Date();
-  response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${currentDate}</p>`);
+app.get('/info', (request, response, next) => {
+  Person.countDocuments({})
+  .then(count => {
+    const currentDate = new Date();
+    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${currentDate}</p>`);
+  })
+  .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
