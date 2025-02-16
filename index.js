@@ -56,44 +56,15 @@ const generateId = () => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
-  if (!body.name || body.name.trim() === "") {
-    return response.status(400).json({
-      error: "name missing"
-    });
-  }
-
-  if (body.number === undefined || body.number.trim() === "") {
-    return response.status(400).json({
-      error: "number missing"
-    });
-  }
-
-  //const nameExists = persons.some(person => person.name.toLowerCase() === body.name.toLowerCase());
-  //if (nameExists) {
-    //return response.status(400).json({
-      //error: "name must be unique"
-    //});
-  //}
-
   const person = new Person({
     name: body.name,
     number: body.number,
   });
 
-  //persons = persons.concat(person);
-
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
-  .catch(error => {
-    console.error('Person validation failed:', error)
-    if (error.name === 'ValidationError') {
-      return response.status(400).json({
-        error: error.message
-      })
-    }
-    next(error)
-  })
+  .catch(error => next(error))
 })
 
 app.get('/info', (request, response, next) => {
