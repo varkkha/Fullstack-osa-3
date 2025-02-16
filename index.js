@@ -1,6 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+
+const Person = require('./models/person')
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -49,7 +52,9 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 const generateId = () => {
@@ -89,7 +94,9 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person);
 
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -101,7 +108,9 @@ app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id);
   const person = persons.find(person => person.id === id);
   if (person) {
-    response.json(person);
+    Person.findById(request.params.id).then(person => {
+      response.json(person)
+    });
   } else {
     console.log('Person not found');
     response.status(404).end();
@@ -118,7 +127,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
